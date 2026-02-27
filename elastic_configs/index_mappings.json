@@ -1,0 +1,26 @@
+Used for testing the PII detection in the index mapping. This document contains a credit card number, which should be flagged as PII by the mapping's PII detection logic.
+
+POST support-tickets/_doc/2
+{
+  "ticket_id": "T-1002",
+  "user_name": "Bob Jones",
+  "user_email": "bob@example.com",
+  "message_body": "My payment failed. Here is my card info so you can process it manually: 4532-1111-2222-3333, Exp 10/25, CVV 123.",
+  "status": "open",
+  "timestamp": "2023-10-27T10:05:00Z",
+  "has_pii": false
+}
+
+POST audit-logs/_bulk
+{ "index": {} }
+{ "target_document_id": "1005", "target_index": "support-tickets", "action_taken": "REDACTED", "reason": "PII Detected: SSN found", "timestamp": "2026-02-22T08:30:00Z" }
+{ "index": {} }
+{ "target_document_id": "1008", "target_index": "chat-logs", "action_taken": "REDACTED", "reason": "PII Detected: Credit Card (Visa)", "timestamp": "2026-02-21T14:20:00Z" }
+{ "index": {} }
+{ "target_document_id": "1012", "target_index": "support-tickets", "action_taken": "FLAGGED", "reason": "Suspicious pattern: API Key", "timestamp": "2026-02-20T09:15:00Z" }
+{ "index": {} }
+{ "target_document_id": "1044", "target_index": "email-archive", "action_taken": "REDACTED", "reason": "PII Detected: Password dump", "timestamp": "2026-02-23T11:00:00Z" }
+{ "index": {} }
+{ "target_document_id": "1055", "target_index": "support-tickets", "action_taken": "REDACTED", "reason": "PII Detected: Credit Card (Amex)", "timestamp": "2026-02-19T16:45:00Z" }
+{ "index": {} }
+{ "target_document_id": "1060", "target_index": "slack-export", "action_taken": "REDACTED", "reason": "PII Detected: AWS Secret Key", "timestamp": "2026-02-18T10:00:00Z" }

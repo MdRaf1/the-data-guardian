@@ -1,0 +1,22 @@
+name: redact-pii-ticket
+enabled: true
+description: "Redacts PII from a support ticket."
+triggers:
+  - type: manual
+inputs:
+  - name: internal_doc_id
+    type: string
+    required: true
+    description: "The Elasticsearch _id"
+  - name: redacted_text
+    type: string
+    required: true
+    description: "The sanitized message"
+steps:
+  - name: update_ticket
+    type: elasticsearch.index
+    with:
+      index: support-tickets
+      id: "{{inputs.internal_doc_id}}"
+      document:
+        message_body: "{{inputs.redacted_text}}"

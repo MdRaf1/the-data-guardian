@@ -1,0 +1,6 @@
+FROM support-tickets METADATA _id
+| WHERE match(message_body, "card credit password key secret urgent token")
+| WHERE status == "open"
+| EVAL internal_doc_id = TO_STRING(_id)
+| KEEP internal_doc_id, ticket_id, user_name, message_body, timestamp
+| LIMIT 10
